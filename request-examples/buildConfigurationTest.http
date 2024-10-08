@@ -7,6 +7,10 @@
 @projectId = test_project_3
 @buildTypeId = test_build_type_3
 
+GET http://admin:admin@{{host}}:8111/app/rest/buildTypes/id:EmptyRep_Build
+Accept: application/json
+
+### 1321. Create project
 GET http://admin:admin@{{host}}:8111/app/rest/projects/
 Accept: application/json
 
