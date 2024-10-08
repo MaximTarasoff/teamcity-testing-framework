@@ -1,55 +1,28 @@
 package com.example.teamcity;
 
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 import teamcity.api.enums.Endpoint;
-import teamcity.api.generator.TestDataGenerator;
 import teamcity.api.model.*;
 import teamcity.api.request.CheckedRequest;
-import teamcity.api.request.cheked.CheckedBase;
 import teamcity.api.request.uncheked.UnchekedBase;
 import teamcity.api.spec.Specification;
 
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static io.qameta.allure.Allure.step;
 import static teamcity.api.generator.TestDataGenerator.generate;
 
 @Test(groups = {"Regression"})
 public class BuildConfigurationTest extends BaseApiTest {
 
-    //    @Test
-//    public void tes(){
-//                User user = User.builder()
-//                .username("admin")
-//                .password("admin")
-//                .build();
-//
-//        String token = RestAssured
-//                .given()
-//                .spec(Specification.getSpec().authSpec(user))
-//                .get("/authenticationTest.html?csrf")
-//                .then().assertThat().statusCode(HttpStatus.SC_OK)
-//                .extract().asString();
-//        System.out.println(token);
-//    }
     @Test(description = "User should be able to create build type", groups = {"Regression"})
     public void userCreatesBuildTypeTest() {
-        // User user = generate(User.class);
 
-//        CheckedBase<User> userRequester = new CheckedBase<User>(Specification.superUserSpec(), Endpoint.USERS);
-//        userRequester.create(user);
         superUserCheckRequests.getRequest(Endpoint.USERS).create(testData.getUser());
         CheckedRequest userCheckRequest = new CheckedRequest(Specification.authSpec(testData.getUser()));
 
-        // Project project = generate(Project.class);
-
         userCheckRequest.<Project>getRequest(Endpoint.PROJECT).create(testData.getProject());
-
-        //BuildType buildType = generate(Arrays.asList(project), BuildType.class);
 
         userCheckRequest.getRequest(Endpoint.BUILD_TYPES).create(testData.getBuildType());
 
@@ -63,16 +36,10 @@ public class BuildConfigurationTest extends BaseApiTest {
     public void userCreatesTwoBuildTypesWithTheSameIdTest() {
         BuildType buildTypeWithSameId = generate(Arrays.asList(testData.getProject()), BuildType.class, testData.getBuildType().getId());
 
-        //User user = generate(User.class);
-
         superUserCheckRequests.getRequest(Endpoint.USERS).create(testData.getUser());
         CheckedRequest userCheckRequest = new CheckedRequest(Specification.authSpec(testData.getUser()));
 
-        //Project project = generate(Project.class);
-
         userCheckRequest.<Project>getRequest(Endpoint.PROJECT).create(testData.getProject());
-
-        // BuildType buildType1 = generate(Arrays.asList(project), BuildType.class);
 
         userCheckRequest.getRequest(Endpoint.BUILD_TYPES).create(testData.getBuildType());
         new UnchekedBase(Specification.authSpec(testData.getUser()), Endpoint.BUILD_TYPES)
@@ -108,12 +75,10 @@ public class BuildConfigurationTest extends BaseApiTest {
         testDataTwo.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testDataTwo.getProject().getId()));
         superUserCheckRequests.<User>getRequest(Endpoint.USERS).create(testDataTwo.getUser());
 
-
         new UnchekedBase(Specification.authSpec(testDataOne.getUser()), Endpoint.BUILD_TYPES)
                 .create(testDataTwo.getBuildType())
                 .then().assertThat()
-                        .statusCode(HttpStatus.SC_FORBIDDEN)
-                .body(Matchers.containsString("You do not have enough permissions to edit project with"));
+                .statusCode(HttpStatus.SC_FORBIDDEN)
+                .body(Matchers.containsString("You do not have enough permissions to edit project with id: %s".formatted(testDataTwo.getProject().getId())));
     }
-
 }
