@@ -3,6 +3,7 @@ package teamcity.api.request.cheked;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 import teamcity.api.enums.Endpoint;
+import teamcity.api.generator.TestDataStorage;
 import teamcity.api.model.BaseModel;
 import teamcity.api.request.CrudInterface;
 import teamcity.api.request.Request;
@@ -20,12 +21,15 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
 
     @Override
     public T create(BaseModel model) { //<T extends BaseModel> добавляем к классу, чтобы ыбла возможность возвращать любой объект который нам нужен
-        return (T) unchekedBase
+        var createdModel = (T) unchekedBase
                 .create(model)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().as(endpoint.getModelClass());
+
+        TestDataStorage.getStorage().addCreatedEntity(endpoint, createdModel);
+        return createdModel;
     }
 
     @Override

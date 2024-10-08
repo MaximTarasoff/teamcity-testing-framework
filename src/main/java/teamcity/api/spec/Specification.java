@@ -12,19 +12,7 @@ public class Specification { //делаем его синглтон, тк нам
 
     private static Specification spec;
 
-    private Specification() {
-    }
-
-    ;
-
-    public static Specification getSpec() {
-        if (spec == null) {
-            spec = new Specification();
-        }
-        return spec;
-    }
-
-    private RequestSpecBuilder resBuilder() {
+    private static RequestSpecBuilder resBuilder() {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.addFilter(new RequestLoggingFilter());
         requestSpecBuilder.addFilter(new ResponseLoggingFilter());
@@ -32,16 +20,22 @@ public class Specification { //делаем его синглтон, тк нам
         requestSpecBuilder.setAccept(ContentType.JSON);
         return requestSpecBuilder;
     }
+    public static RequestSpecification superUserSpec() {
+        RequestSpecBuilder requestSpecBuilder = resBuilder();
+        requestSpecBuilder.setBaseUri("http://%s:%s@%s/httpAuth".formatted("", Config.getProperty("superUserToken"), Config.getProperty("host")));
+        return requestSpecBuilder.build();
+    }
 
-    public RequestSpecification unauthSpec() {
+    public static RequestSpecification unauthSpec() {
         // пример использования паттерна проектирования - builder
         RequestSpecBuilder requestSpecBuilder = resBuilder();
         return requestSpecBuilder.build();
     }
 
-    public RequestSpecification authSpec(User user) {
+    public static RequestSpecification authSpec(User user) {
         RequestSpecBuilder requestSpecBuilder = resBuilder();
-        requestSpecBuilder.setBaseUri("http://" + user.getUsername() + ":" + user.getPassword() + "@" + Config.getProperty("host"));
+        requestSpecBuilder.setBaseUri("http://%s:%s@%s".formatted(user.getUsername(), user.getPassword(), Config.getProperty("host")));
+        //        requestSpecBuilder.setBaseUri("http://" + user.getUsername() + ":" + user.getPassword() + "@" + Config.getProperty("host"));
         return requestSpecBuilder.build();
     }
 }
