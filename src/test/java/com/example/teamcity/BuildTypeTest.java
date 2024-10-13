@@ -14,7 +14,7 @@ import java.util.Arrays;
 import static teamcity.api.generator.TestDataGenerator.generate;
 
 @Test(groups = {"Regression"})
-public class BuildConfigurationTest extends BaseApiTest {
+public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "User should be able to create build type", groups = {"Regression"})
     public void userCreatesBuildTypeTest() {
