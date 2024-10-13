@@ -50,6 +50,8 @@ public class BuildConfigurationTest extends BaseApiTest {
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
+
+
         superUserCheckRequests.getRequest(Endpoint.PROJECT).create(testData.getProject());
 
         testData.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testData.getProject().getId()));
@@ -63,9 +65,11 @@ public class BuildConfigurationTest extends BaseApiTest {
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
 
+    //just to pull
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        TestData testDataOne = generate();
+
+           TestData testDataOne = generate();
         superUserCheckRequests.getRequest(Endpoint.PROJECT).create(testDataOne.getProject());
         testDataOne.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testDataOne.getProject().getId()));
         superUserCheckRequests.<User>getRequest(Endpoint.USERS).create(testDataOne.getUser());
