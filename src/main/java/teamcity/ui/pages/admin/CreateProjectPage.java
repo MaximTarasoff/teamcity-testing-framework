@@ -22,11 +22,6 @@ public class CreateProjectPage extends CreateBasePage {
     }
 
     public void setupProject(String projectName, String buildTypeName) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         projectNameInput.val(projectName);
         buildTypeNameInput.val(buildTypeName);
         submitButton.click();
