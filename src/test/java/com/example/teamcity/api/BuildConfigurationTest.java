@@ -1,9 +1,10 @@
-package com.example.teamcity;
+package com.example.teamcity.api;
 
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 import teamcity.api.enums.Endpoint;
+import teamcity.api.generator.TestDataGenerator;
 import teamcity.api.model.*;
 import teamcity.api.request.CheckedRequest;
 import teamcity.api.request.uncheked.UnchekedBase;
@@ -27,14 +28,14 @@ public class BuildConfigurationTest extends BaseApiTest {
         userCheckRequest.getRequest(Endpoint.BUILD_TYPES).create(testData.getBuildType());
 
         BuildType createdBuildType = userCheckRequest
-                .<BuildType>getRequest(Endpoint.BUILD_TYPES).read(testData.getBuildType().getId());
+                .<BuildType>getRequest(Endpoint.BUILD_TYPES).read("id:" + testData.getBuildType().getId());
 
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
 
     @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
     public void userCreatesTwoBuildTypesWithTheSameIdTest() {
-        BuildType buildTypeWithSameId = generate(Arrays.asList(testData.getProject()), BuildType.class, testData.getBuildType().getId());
+        BuildType buildTypeWithSameId = TestDataGenerator.generate(Arrays.asList(testData.getProject()), BuildType.class, testData.getBuildType().getId());
 
         superUserCheckRequests.getRequest(Endpoint.USERS).create(testData.getUser());
         CheckedRequest userCheckRequest = new CheckedRequest(Specification.authSpec(testData.getUser()));
@@ -58,7 +59,7 @@ public class BuildConfigurationTest extends BaseApiTest {
         CheckedRequest userCheckRequest = new CheckedRequest(Specification.authSpec(testData.getUser()));
         userCheckRequest.getRequest(Endpoint.BUILD_TYPES).create(testData.getBuildType());
         BuildType createdBuildType = userCheckRequest
-                .<BuildType>getRequest(Endpoint.BUILD_TYPES).read(testData.getBuildType().getId());
+                .<BuildType>getRequest(Endpoint.BUILD_TYPES).read("id:" +testData.getBuildType().getId());
 
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
