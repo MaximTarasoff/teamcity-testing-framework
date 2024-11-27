@@ -16,11 +16,6 @@ public abstract class CreateBasePage extends BasePage {
     protected SelenideElement connectionSuccessfulMessage = $(".connectionSuccessful");
 
     protected void baseCreateForm(String url){
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         urlInput.val(url);
         submitButton.click();
         connectionSuccessfulMessage.should(Condition.appear, BASE_WAITING_TIME);
