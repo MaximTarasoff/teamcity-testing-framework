@@ -23,7 +23,6 @@ jobs:
       - name: Make mvnw and all scripts executable
         run: chmod -R +x ./
 
-
       - name: Validate Checkstyle
         run: ./mvnw validate
 
