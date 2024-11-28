@@ -20,6 +20,10 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
+      - name: Make mvnw and all scripts executable
+        run: chmod -R +x ./
+
+
       - name: Validate Checkstyle
         run: ./mvnw validate
 
