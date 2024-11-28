@@ -1,5 +1,8 @@
 package teamcity.api.spec;
 
+import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter;
+import com.github.viclovsky.swagger.coverage.SwaggerCoverageConstants;
+import com.github.viclovsky.swagger.coverage.SwaggerCoverageRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -7,6 +10,8 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import teamcity.api.config.Config;
 import teamcity.api.model.User;
+
+import java.nio.file.Paths;
 
 public class Specification { //делаем его синглтон, тк нам он нужен только один
 
@@ -16,6 +21,11 @@ public class Specification { //делаем его синглтон, тк нам
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.addFilter(new RequestLoggingFilter());
         requestSpecBuilder.addFilter(new ResponseLoggingFilter());
+        requestSpecBuilder.addFilter(new SwaggerCoverageRestAssured(
+                new FileSystemOutputWriter(
+                        Paths.get("target/" + SwaggerCoverageConstants.OUTPUT_DIRECTORY)
+                )
+        ));
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.setAccept(ContentType.JSON);
         return requestSpecBuilder;
