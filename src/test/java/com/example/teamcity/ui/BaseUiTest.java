@@ -2,7 +2,9 @@ package com.example.teamcity.ui;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.example.teamcity.BaseTest;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeSuite;
 import teamcity.api.config.Config;
@@ -23,6 +25,11 @@ public class BaseUiTest extends BaseTest {
         Configuration.browserSize = Config.getProperty("browserSize");
 
         Configuration.browserCapabilities.setCapability("selenoid:options", Map.of("enableVNC", true, "enableLog", true));
+
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
+                .screenshots(true)
+                .savePageSource(true)
+                .includeSelenideSteps(true));
     }
 
     @AfterMethod(alwaysRun = true)

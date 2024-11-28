@@ -3,6 +3,7 @@ package teamcity.api.spec;
 import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter;
 import com.github.viclovsky.swagger.coverage.SwaggerCoverageConstants;
 import com.github.viclovsky.swagger.coverage.SwaggerCoverageRestAssured;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -21,6 +22,7 @@ public class Specification { //делаем его синглтон, тк нам
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.addFilter(new RequestLoggingFilter());
         requestSpecBuilder.addFilter(new ResponseLoggingFilter());
+        requestSpecBuilder.addFilter(new AllureRestAssured());
         requestSpecBuilder.addFilter(new SwaggerCoverageRestAssured(
                 new FileSystemOutputWriter(
                         Paths.get("target/" + SwaggerCoverageConstants.OUTPUT_DIRECTORY)

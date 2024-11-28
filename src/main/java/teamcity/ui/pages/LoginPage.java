@@ -2,6 +2,7 @@ package teamcity.ui.pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import teamcity.api.model.User;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -15,10 +16,12 @@ public class LoginPage extends BasePage{
 
     public SelenideElement inputSubmitLogin2 = $(".loginButton");
 
+    @Step("Open login page")
     public static LoginPage open () {
         return Selenide.open(LOGIN_URL, LoginPage.class);
     }
 
+    @Step("Login as {user.username}")
     public ProjectsPage login(User user) {
         // Метод val вместо clear, sendKeys
         inputUsername.val(user.getUsername());

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="allure-selenide-2.25.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/allure-selenide-2.25.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
