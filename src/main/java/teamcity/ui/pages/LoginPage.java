@@ -21,6 +21,7 @@ public class LoginPage extends BasePage{
         return Selenide.open(LOGIN_URL, LoginPage.class);
     }
 
+
     @Step("Login as {user.username}")
     public ProjectsPage login(User user) {
         // Метод val вместо clear, sendKeys
